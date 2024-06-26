@@ -16,7 +16,7 @@ import { LinearGradient } from "expo-linear-gradient";
 
 const MovideDetailScreen = () => {
   const params = useLocalSearchParams();
-  const { backdrop_path, title, overview } = params;
+  const { backdrop_path, title, overview, vote_average } = params;
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const handleOnBackPress = () => {
@@ -49,7 +49,7 @@ const MovideDetailScreen = () => {
     },
     scrollView: {
       paddingBottom: SIZES.margin,
-      marginTop: SIZES.height * 0.25,
+      marginTop: SIZES.height * 0.3,
       marginHorizontal: SIZES.l3,
       alignItems: "stretch",
     },
@@ -105,6 +105,9 @@ const MovideDetailScreen = () => {
 
           <Text style={styles.textBullet}>Release • 2020 • 130 min</Text>
           <Text style={styles.textBullet}>Action • Comedy • Romance</Text>
+          <Text
+            style={styles.textBullet}
+          >{`Popularity • ${vote_average}`}</Text>
           <Text style={styles.textOverview}>{overview}</Text>
         </View>
       </ScrollView>

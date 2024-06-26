@@ -3,16 +3,15 @@ import { Link } from "expo-router";
 import React from "react";
 import { COLORS, SIZES, FONTS } from "@/constants/theme";
 import Carousel from "react-native-reanimated-carousel";
-import { sampleData } from "@/constants/constants";
 
-export default function TopRatedMovie() {
+export default function TopRatedMovie({ data }: any) {
   const renderCarousel = ({ item, index }: any) => {
-    const { poster_path, title, backdrop_path, overview } = item;
+    const { poster_path, title, backdrop_path, overview, vote_average } = item;
     return (
       <Link
         href={{
           pathname: "/detail",
-          params: { backdrop_path, title, overview },
+          params: { backdrop_path, title, overview, vote_average },
         }}
         style={styles.containerCarousel}
         asChild
@@ -58,7 +57,7 @@ export default function TopRatedMovie() {
         }}
       >
         <Carousel
-          data={sampleData.results}
+          data={data?.results}
           renderItem={renderCarousel}
           width={SIZES.width}
           height={SIZES.height * 0.35}

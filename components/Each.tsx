@@ -1,6 +1,6 @@
 import React from "react";
 
-const Each = ({ render, of }: any) => {
+const Each = ({ render, of = [] }: any) => {
   // Render each element using the 'render' prop
   return (
     <>

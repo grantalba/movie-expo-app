@@ -9,9 +9,8 @@ import {
 import React from "react";
 import { SIZES, FONTS, COLORS } from "@/constants/theme";
 import Each from "./Each";
-import { sampleData } from "@/constants/constants";
 
-const MovieList = ({ title }: any) => {
+const MovieList = ({ title, data }: any) => {
   const styles = StyleSheet.create({
     content: SIZES.content,
     headerText: {
@@ -38,7 +37,7 @@ const MovieList = ({ title }: any) => {
       </View>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <Each
-          of={sampleData.results}
+          of={data?.results}
           render={(
             item: { poster_path: string },
             index: { toString: () => React.Key | null | undefined }
