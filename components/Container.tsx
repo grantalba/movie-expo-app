@@ -3,9 +3,11 @@ import { View, StyleSheet, ColorValue, Platform } from "react-native";
 import { Appbar } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import RenderWhen from "./RenderWhen";
-import { COLORS, FONTS } from "../constants/theme";
+import { COLORS, FONTS, SIZES } from "../constants/theme";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { LinearGradient } from "expo-linear-gradient";
+import { transparent } from "react-native-paper/lib/typescript/styles/themes/v2/colors";
 
 interface Header {
   pageTitle?: any;
@@ -56,6 +58,7 @@ const Container = ({
       alignItems: "center",
       justifyContent: "center",
     },
+    linearGradient: { width: SIZES.width, height: SIZES.height },
   });
 
   return (
@@ -86,7 +89,12 @@ const Container = ({
         </Appbar.Header>
       </RenderWhen>
 
-      {children}
+      <LinearGradient
+        colors={["transparent", "#10002B", "#280F3E"]}
+        style={styles.linearGradient}
+      >
+        {children}
+      </LinearGradient>
     </View>
   );
 };

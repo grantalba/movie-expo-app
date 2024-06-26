@@ -58,9 +58,14 @@ export default function Index() {
           />
         ),
       }}
-      backgroundColor={COLORS.backgroundSecondary}
+      backgroundColor={COLORS.backgroundTertiary}
     >
-      <ScrollView style={{ marginHorizontal: SIZES.base }}>
+      <ScrollView
+        style={{
+          marginHorizontal: SIZES.base,
+          marginBottom: SIZES.height * 0.2,
+        }}
+      >
         {/* Top rate movies */}
         <TopRatedMovie
           data={topRatedMovies}
