@@ -21,8 +21,10 @@ const Container = ({
   children,
   backgroundColor,
   header,
+  hasLinearGradient = true,
 }: PropsWithChildren<{
   backgroundColor?: ColorValue;
+  hasLinearGradient?: boolean;
   header?: Header;
 }>): React.JSX.Element => {
   const insets = useSafeAreaInsets();
@@ -43,9 +45,8 @@ const Container = ({
       flexDirection: "column",
 
       // Paddings to handle safe area
+      paddingHorizontal: insets.left + insets.right,
       paddingTop: insets.top,
-      paddingLeft: insets.left + 10,
-      paddingRight: insets.right + 10,
       paddingBottom: insets.bottom + SIZES.margin,
       backgroundColor,
     },
@@ -54,7 +55,7 @@ const Container = ({
       zIndex: 20,
     },
     contentStyle: {
-      marginLeft: 10,
+      marginHorizontal: 10,
       alignItems: "center",
       justifyContent: "center",
     },
@@ -89,12 +90,17 @@ const Container = ({
         </Appbar.Header>
       </RenderWhen>
 
-      <LinearGradient
-        colors={["transparent", "#10002B", "#280F3E"]}
-        style={styles.linearGradient}
-      >
-        {children}
-      </LinearGradient>
+      <RenderWhen condition={hasLinearGradient}>
+        <LinearGradient
+          colors={["transparent", "#10002B", "#280F3E"]}
+          style={styles.linearGradient}
+        >
+          {children}
+        </LinearGradient>
+      </RenderWhen>
+      <RenderWhen condition={!hasLinearGradient}>
+        <>{children}</>
+      </RenderWhen>
     </View>
   );
 };
