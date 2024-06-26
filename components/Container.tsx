@@ -46,7 +46,7 @@ const Container = ({
       paddingTop: insets.top,
       paddingLeft: insets.left + 10,
       paddingRight: insets.right + 10,
-      paddingBottom: insets.bottom + 5,
+      paddingBottom: insets.bottom + SIZES.margin,
       backgroundColor,
     },
     header: {

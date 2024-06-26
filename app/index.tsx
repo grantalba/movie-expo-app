@@ -8,7 +8,7 @@ import MovieList from "@/components/MovieList";
 import useApi from "@/hooks/useApi";
 
 export default function Index() {
-  const [pageNumber, setPageNumber] = useState(3);
+  const [pageNumber, setPageNumber] = useState(1);
   const { data: topRatedMovies, error: topRatedMoviesError } = useApi(
     "top_rated",
     "GET",
@@ -30,10 +30,10 @@ export default function Index() {
   }, [pageNumber]);
 
   const handleLeftIconPress = () => {
-    // TODO: HandleLeftBackPress
+    // TODO: handleLeftIconPress
   };
   const handleRightIconPress = () => {
-    // TODO: HandleLeftBackPress
+    // TODO: handleRightIconPress
   };
 
   return (
@@ -63,7 +63,10 @@ export default function Index() {
       <ScrollView
         style={{
           marginHorizontal: SIZES.base,
-          marginBottom: SIZES.height * 0.2,
+          marginBottom: SIZES.base,
+        }}
+        contentContainerStyle={{
+          paddingBottom: SIZES.height * 0.15,
         }}
       >
         {/* Top rate movies */}
