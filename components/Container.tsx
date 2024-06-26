@@ -1,27 +1,30 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import { View, StyleSheet, ColorValue, Platform } from "react-native";
 import { Appbar } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import RenderWhen from "./RenderWhen";
-import { COLORS, FONTS } from "../constants/theme";
+import { COLORS, FONTS, SIZES } from "../constants/theme";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { LinearGradient } from "expo-linear-gradient";
+import { transparent } from "react-native-paper/lib/typescript/styles/themes/v2/colors";
 
 interface Header {
   pageTitle?: any;
   shouldDisplayBack?: boolean;
   onBackPress?: any;
+  left?: React.ReactElement;
+  right?: React.ReactElement;
 }
 
 const Container = ({
   children,
   backgroundColor,
   header,
-}: {
-  children: React.ReactElement | React.ReactElement[];
+}: PropsWithChildren<{
   backgroundColor?: ColorValue;
   header?: Header;
-}): React.JSX.Element => {
+}>): React.JSX.Element => {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
 
@@ -41,17 +44,21 @@ const Container = ({
 
       // Paddings to handle safe area
       paddingTop: insets.top,
-      paddingLeft: insets.left,
-      paddingRight: insets.right,
+      paddingLeft: insets.left + 10,
+      paddingRight: insets.right + 10,
+      paddingBottom: insets.bottom + SIZES.margin,
       backgroundColor,
     },
     header: {
       backgroundColor: "transparent",
+      zIndex: 20,
     },
     contentStyle: {
       marginLeft: 10,
       alignItems: "center",
+      justifyContent: "center",
     },
+    linearGradient: { width: SIZES.width, height: SIZES.height },
   });
 
   return (
@@ -66,6 +73,7 @@ const Container = ({
               onPress={handleOnBackPress}
             />
           </RenderWhen>
+          <RenderWhen condition={!!header?.left}>{header?.left}</RenderWhen>
           <RenderWhen condition={!!header?.pageTitle}>
             <Appbar.Content
               title={header?.pageTitle}
@@ -77,10 +85,16 @@ const Container = ({
               style={styles.contentStyle}
             />
           </RenderWhen>
+          <RenderWhen condition={!!header?.left}>{header?.right}</RenderWhen>
         </Appbar.Header>
       </RenderWhen>
 
-      {children}
+      <LinearGradient
+        colors={["transparent", "#10002B", "#280F3E"]}
+        style={styles.linearGradient}
+      >
+        {children}
+      </LinearGradient>
     </View>
   );
 };
