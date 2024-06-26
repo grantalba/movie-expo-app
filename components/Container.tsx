@@ -49,6 +49,7 @@ const Container = ({
     },
     header: {
       backgroundColor: "transparent",
+      zIndex: 20,
     },
     contentStyle: {
       marginLeft: 10,

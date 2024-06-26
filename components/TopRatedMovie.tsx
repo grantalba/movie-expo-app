@@ -7,13 +7,21 @@ import { sampleData } from "@/constants/constants";
 
 export default function TopRatedMovie() {
   const renderCarousel = ({ item, index }: any) => {
+    const { poster_path, title, backdrop_path, overview } = item;
     return (
-      <Link href="/detail" style={styles.containerCarousel} asChild>
+      <Link
+        href={{
+          pathname: "/detail",
+          params: { backdrop_path, title, overview },
+        }}
+        style={styles.containerCarousel}
+        asChild
+      >
         <TouchableOpacity>
           <Image
             key={index.toString()}
             source={{
-              uri: `https://image.tmdb.org/t/p/w500/${item.poster_path}`,
+              uri: `https://image.tmdb.org/t/p/w500/${poster_path}`,
             }}
             width={SIZES.width * 0.6}
             height={SIZES.height * 0.4}
