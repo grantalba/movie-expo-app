@@ -6,11 +6,13 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { memo } from "react";
 import { SIZES, FONTS, COLORS } from "@/constants/theme";
 import Each from "./Each";
+import { Link } from "expo-router";
+import RenderWhen from "./RenderWhen";
 
-const MovieList = ({ title, data }: any) => {
+const MovieList = ({ title, data, canBeClicked = true }: any) => {
   const styles = StyleSheet.create({
     content: SIZES.content,
     headerText: {
@@ -39,20 +41,61 @@ const MovieList = ({ title, data }: any) => {
         <Each
           of={data?.results}
           render={(
-            item: { poster_path: string },
+            item: {
+              poster_path: any;
+              backdrop_path: any;
+              title: any;
+              overview: any;
+              vote_average: any;
+            },
             index: { toString: () => React.Key | null | undefined }
           ): any => {
+            const { backdrop_path, title, overview, vote_average } = item;
+
             return (
-              <TouchableOpacity key={index.toString()}>
-                <Image
-                  source={{
-                    uri: `https://image.tmdb.org/t/p/w500/${item.poster_path}`,
-                  }}
-                  width={SIZES.width * 0.3}
-                  height={SIZES.width * 0.4}
-                  style={{ marginRight: SIZES.base }}
-                />
-              </TouchableOpacity>
+              <View key={index.toString()}>
+                <RenderWhen condition={canBeClicked}>
+                  <Link
+                    href={{
+                      pathname: "/detail",
+                      params: {
+                        backdrop_path,
+                        title,
+                        overview,
+                        vote_average,
+                      },
+                    }}
+                    asChild
+                    key={index.toString()}
+                  >
+                    <TouchableOpacity>
+                      <Image
+                        source={{
+                          uri: `https://image.tmdb.org/t/p/w500/${item.poster_path}`,
+                        }}
+                        width={SIZES.width * 0.3}
+                        height={SIZES.width * 0.4}
+                        style={{ marginRight: SIZES.base }}
+                      />
+                    </TouchableOpacity>
+                  </Link>
+                </RenderWhen>
+                <RenderWhen condition={!canBeClicked}>
+                  <TouchableOpacity
+                    disabled={!canBeClicked}
+                    key={index.toString()}
+                  >
+                    <Image
+                      source={{
+                        uri: `https://image.tmdb.org/t/p/w500/${item.poster_path}`,
+                      }}
+                      width={SIZES.width * 0.3}
+                      height={SIZES.width * 0.4}
+                      style={{ marginRight: SIZES.base }}
+                    />
+                  </TouchableOpacity>
+                </RenderWhen>
+              </View>
             );
           }}
         />
@@ -61,4 +104,4 @@ const MovieList = ({ title, data }: any) => {
   );
 };
 
-export default MovieList;
+export default memo(MovieList);

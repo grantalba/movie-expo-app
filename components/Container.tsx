@@ -42,8 +42,8 @@ const Container = ({
 
       // Paddings to handle safe area
       paddingTop: insets.top,
-      paddingLeft: insets.left + 5,
-      paddingRight: insets.right + 5,
+      paddingLeft: insets.left + 10,
+      paddingRight: insets.right + 10,
       paddingBottom: insets.bottom + 5,
       backgroundColor,
     },

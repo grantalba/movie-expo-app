@@ -24,6 +24,12 @@ const useApi = (endpoint: string, method = "GET", pageNumber = 1) => {
       const response = await axios.request(options);
 
       if (response.data) {
+        if (pageNumber > 1 && data) {
+          const newData = response.data;
+          newData.results = [...data?.results, ...response?.data?.results];
+          console.log(newData.results);
+          setData(newData);
+        }
         setData(response.data);
       }
     } catch (err: any) {

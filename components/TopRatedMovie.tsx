@@ -1,10 +1,12 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import React, { memo } from "react";
+import { View, StyleSheet, Image, TouchableOpacity, Text } from "react-native";
 import { Link } from "expo-router";
-import React from "react";
 import { COLORS, SIZES, FONTS } from "@/constants/theme";
 import Carousel from "react-native-reanimated-carousel";
 
-export default function TopRatedMovie({ data }: any) {
+export default memo(function TopRatedMovie({ data, handlePageNumber }: any) {
+  const lastIndex = data?.results?.length;
+
   const renderCarousel = ({ item, index }: any) => {
     const { poster_path, title, backdrop_path, overview, vote_average } = item;
     return (
@@ -49,7 +51,7 @@ export default function TopRatedMovie({ data }: any) {
   });
 
   return (
-    <View style={SIZES.content}>
+    <View style={{ ...SIZES.content }}>
       <Text style={styles.headerText}>Top Rated Movie</Text>
       <View
         style={{
@@ -68,8 +70,13 @@ export default function TopRatedMovie({ data }: any) {
           modeConfig={{
             parallaxScrollingOffset: 200,
           }}
+          onScrollEnd={(index) => {
+            if (lastIndex === index + 1) {
+              handlePageNumber();
+            }
+          }}
         />
       </View>
     </View>
   );
-}
+});

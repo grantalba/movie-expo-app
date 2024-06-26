@@ -3,20 +3,26 @@ import {
   Text,
   Image,
   ScrollView,
-  Platform,
+  TouchableOpacity,
   StyleSheet,
 } from "react-native";
 import React from "react";
-import Container from "@/components/Container";
-import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
+import { useLocalSearchParams, useNavigation } from "expo-router";
 import { COLORS, SIZES, FONTS } from "@/constants/theme";
-import { MaterialIcons } from "@expo/vector-icons";
+import {
+  MaterialIcons,
+  Ionicons,
+  Entypo,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
+import MovieList from "@/components/MovieList";
+import { sampleData } from "@/constants/constants";
 
 const MovideDetailScreen = () => {
   const params = useLocalSearchParams();
-  const { backdrop_path, title, overview, vote_average } = params;
+  const { backdrop_path, title, overview, vote_average, canBeClicked } = params;
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const handleOnBackPress = () => {
@@ -48,8 +54,8 @@ const MovideDetailScreen = () => {
       borderRadius: SIZES.base,
     },
     scrollView: {
-      paddingBottom: SIZES.margin,
-      marginTop: SIZES.height * 0.3,
+      paddingBottom: SIZES.height * 0.4,
+      marginTop: SIZES.height * 0.225,
       marginHorizontal: SIZES.l3,
       alignItems: "stretch",
     },
@@ -73,6 +79,38 @@ const MovideDetailScreen = () => {
       fontWeight: "400",
       marginTop: SIZES.h1,
       textAlign: "justify",
+    },
+    touchableOpacityStyle: {
+      alignItems: "center",
+      width: "100%",
+      justifyContent: "center",
+      height: 50,
+      borderRadius: SIZES.base,
+      backgroundColor: COLORS.primary600,
+      marginTop: SIZES.margin,
+      flexDirection: "row",
+    },
+    textLabelStyle: {
+      color: COLORS.gray100,
+      fontWeight: "bold",
+      marginLeft: SIZES.base,
+      ...FONTS.l1,
+    },
+    playButton: { marginRight: SIZES.base },
+    bottomButtons: {
+      flexDirection: "row",
+      alignItems: "flex-start",
+      marginTop: SIZES.h1,
+    },
+    watchList: {
+      alignItems: "center",
+      justifyContent: "center",
+      marginRight: SIZES.h1,
+    },
+    watchListText: {
+      ...FONTS.l2,
+      color: COLORS.contentSecondary,
+      marginTop: SIZES.base,
     },
   });
 
@@ -105,10 +143,59 @@ const MovideDetailScreen = () => {
 
           <Text style={styles.textBullet}>Release • 2020 • 130 min</Text>
           <Text style={styles.textBullet}>Action • Comedy • Romance</Text>
-          <Text
-            style={styles.textBullet}
-          >{`Popularity • ${vote_average}`}</Text>
+          <Text style={styles.textBullet}>
+            {`Popularity • ${vote_average}`}
+          </Text>
+          <TouchableOpacity style={styles.touchableOpacityStyle}>
+            <Ionicons
+              name="play"
+              size={24}
+              color={COLORS.contentPrimary}
+              style={styles.playButton}
+            />
+            <Text style={styles.textLabelStyle}>PLAY</Text>
+          </TouchableOpacity>
           <Text style={styles.textOverview}>{overview}</Text>
+        </View>
+        <View style={styles.bottomButtons}>
+          <TouchableOpacity style={styles.watchList}>
+            <Entypo
+              name="add-to-list"
+              size={24}
+              color={COLORS.contentPrimary}
+            />
+            <Text style={styles.watchListText}>Watch List</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.watchList}>
+            <MaterialCommunityIcons
+              name="share-outline"
+              size={24}
+              color={COLORS.contentPrimary}
+            />
+            <Text style={styles.watchListText}>Share</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.watchList}>
+            <MaterialCommunityIcons
+              name="download-outline"
+              size={24}
+              color={COLORS.contentPrimary}
+            />
+            <Text style={styles.watchListText}>Download</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View
+          style={{
+            flex: 1,
+            width: "100%",
+            marginTop: SIZES.h1,
+          }}
+        >
+          <MovieList
+            title="More like this"
+            data={sampleData}
+            canBeClicked={false}
+          />
         </View>
       </ScrollView>
     </View>

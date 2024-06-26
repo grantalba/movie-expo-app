@@ -1,15 +1,14 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import Container from "@/components/Container";
 import { Platform, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { COLORS, FONTS } from "../constants/theme";
+import { COLORS, SIZES } from "../constants/theme";
 import TopRatedMovie from "@/components/TopRatedMovie";
 import MovieList from "@/components/MovieList";
 import useApi from "@/hooks/useApi";
 
 export default function Index() {
-  // const { data, loading, error } = useApi("top_rated", "GET", 1);
-  const [pageNumber, setPageNumber] = useState(1);
+  const [pageNumber, setPageNumber] = useState(3);
   const { data: topRatedMovies, error: topRatedMoviesError } = useApi(
     "top_rated",
     "GET",
@@ -18,18 +17,22 @@ export default function Index() {
   const { data: upcomingMovies, error: upcomingMoviesError } = useApi(
     "upcoming",
     "GET",
-    pageNumber
+    1
   );
   const { data: popularMovies, error: popularMoviesError } = useApi(
     "popular",
     "GET",
-    pageNumber
+    1
   );
 
-  const handleLeftBackPress = () => {
+  const handlePageNumber = useCallback(() => {
+    setPageNumber(pageNumber + 1);
+  }, [pageNumber]);
+
+  const handleLeftIconPress = () => {
     // TODO: HandleLeftBackPress
   };
-  const handleRightBackPress = () => {
+  const handleRightIconPress = () => {
     // TODO: HandleLeftBackPress
   };
 
@@ -43,7 +46,7 @@ export default function Index() {
             name="menu"
             size={Platform.OS === "ios" ? 30 : 40}
             color={COLORS.primary500}
-            onPress={handleLeftBackPress}
+            onPress={handleLeftIconPress}
           />
         ),
         right: (
@@ -51,15 +54,18 @@ export default function Index() {
             name="person-circle"
             size={Platform.OS === "ios" ? 30 : 40}
             color={COLORS.primary500}
-            onPress={handleRightBackPress}
+            onPress={handleRightIconPress}
           />
         ),
       }}
       backgroundColor={COLORS.backgroundSecondary}
     >
-      <ScrollView>
+      <ScrollView style={{ marginHorizontal: SIZES.base }}>
         {/* Top rate movies */}
-        <TopRatedMovie data={topRatedMovies} />
+        <TopRatedMovie
+          data={topRatedMovies}
+          handlePageNumber={handlePageNumber}
+        />
 
         {/* Upcoming movies */}
         <MovieList title="Upcoming" data={upcomingMovies} />

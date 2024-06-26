@@ -101,7 +101,6 @@ export const SIZES = {
     flex: 1,
     alignItems: "stretch",
     flexDirection: "column",
-    marginHorizontal: 8,
     marginTop: 20,
   },
 
