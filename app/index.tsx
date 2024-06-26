@@ -1,86 +1,159 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
+import {
+  Text,
+  View,
+  FlatList,
+  Image,
+  StyleSheet,
+  Platform,
+} from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useNavigation } from "expo-router";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { SIZES, COLORS, FONTS } from "@/constants/theme";
+import { onboarding_screens, OnboardingScreens } from "@/constants/constants";
+import TextButton from "@/components/TextButton";
 import Container from "@/components/Container";
-import { Platform, ScrollView } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { COLORS, SIZES } from "../constants/theme";
-import TopRatedMovie from "@/components/TopRatedMovie";
-import MovieList from "@/components/MovieList";
-import useApi from "@/hooks/useApi";
 
-export default function Index() {
-  const [pageNumber, setPageNumber] = useState(1);
-  const { data: topRatedMovies, error: topRatedMoviesError } = useApi(
-    "top_rated",
-    "GET",
-    pageNumber
-  );
-  const { data: upcomingMovies, error: upcomingMoviesError } = useApi(
-    "upcoming",
-    "GET",
-    1
-  );
-  const { data: popularMovies, error: popularMoviesError } = useApi(
-    "popular",
-    "GET",
-    1
-  );
+const Index = (): React.JSX.Element => {
+  const insets = useSafeAreaInsets();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
-  const handlePageNumber = useCallback(() => {
-    setPageNumber(pageNumber + 1);
-  }, [pageNumber]);
+  const [isLastPage, setIsLastPage] = React.useState<boolean>(false);
+  const currentIndex = React.useRef<number>(0);
+  const topFlatListRef = React.useRef<FlatList>(null);
+  const bottomFlatListRef = React.useRef<FlatList>(null);
 
-  const handleLeftIconPress = () => {
-    // TODO: handleLeftIconPress
+  const handlePressButton = () => {
+    if (currentIndex.current < onboarding_screens.length - 1) {
+      currentIndex.current += 1;
+      const nextIndex = currentIndex.current;
+      const offset = nextIndex * SIZES.width;
+
+      topFlatListRef?.current?.scrollToOffset({
+        offset,
+        animated: true,
+      });
+
+      bottomFlatListRef?.current?.scrollToOffset({
+        offset,
+        animated: true,
+      });
+
+      if (nextIndex === onboarding_screens.length - 1) {
+        setIsLastPage(true);
+      }
+    } else {
+      navigation.navigate("homescreen");
+    }
   };
-  const handleRightIconPress = () => {
-    // TODO: handleRightIconPress
+
+  const renderTopFlatListItem = ({ item }: { item: OnboardingScreens }) => {
+    return (
+      <View style={styles.topFlatListView}>
+        <Image
+          source={item.image}
+          resizeMode="contain"
+          style={styles.imageContainer}
+        />
+      </View>
+    );
   };
+
+  const renderBottomFlatListItem = ({ item }: { item: OnboardingScreens }) => {
+    return (
+      <View style={styles.topFlatListView}>
+        <Text style={styles.titleStyle}>{item.title}</Text>
+        <Text style={styles.descStyle}>{item.desc}</Text>
+      </View>
+    );
+  };
+
+  const styles = StyleSheet.create({
+    topContainer: {
+      flex: 2,
+      paddingTop: Platform.OS === "android" ? insets.top : 0,
+    },
+    topFlatListView: {
+      width: SIZES.width,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    imageContainer: {
+      width: SIZES.width * 0.8,
+      height: SIZES.height * 0.5,
+      alignItems: "center",
+      justifyContent: "center",
+      alignSelf: "center",
+    },
+    titleStyle: {
+      ...FONTS.h1,
+      fontWeight: "600",
+      textAlign: "center",
+      color: COLORS.primary100,
+    },
+    descStyle: {
+      ...FONTS.l1,
+      fontWeight: "300",
+      marginTop: SIZES.radius,
+      textAlign: "center",
+      color: COLORS.primary100,
+    },
+    textButton: {
+      marginHorizontal: SIZES.padding,
+    },
+    bottomContainer: {
+      flex: 1,
+      justifyContent: "space-around",
+    },
+  });
 
   return (
     <Container
-      header={{
-        shouldDisplayBack: false,
-        pageTitle: "Movies",
-        left: (
-          <Ionicons
-            name="menu"
-            size={Platform.OS === "ios" ? 30 : 40}
-            color={COLORS.primary500}
-            onPress={handleLeftIconPress}
-          />
-        ),
-        right: (
-          <Ionicons
-            name="person-circle"
-            size={Platform.OS === "ios" ? 30 : 40}
-            color={COLORS.primary500}
-            onPress={handleRightIconPress}
-          />
-        ),
-      }}
       backgroundColor={COLORS.backgroundTertiary}
+      hasLinearGradient={false}
     >
-      <ScrollView
-        style={{
-          marginHorizontal: SIZES.base,
-          marginBottom: SIZES.base,
-        }}
-        contentContainerStyle={{
-          paddingBottom: SIZES.height * 0.15,
-        }}
-      >
-        {/* Top rate movies */}
-        <TopRatedMovie
-          data={topRatedMovies}
-          handlePageNumber={handlePageNumber}
+      {/* Image Flatlist */}
+      <View style={styles.topContainer}>
+        <FlatList
+          ref={topFlatListRef}
+          pagingEnabled
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          scrollEnabled={false}
+          snapToInterval={SIZES.width}
+          snapToAlignment="center"
+          decelerationRate="fast"
+          keyExtractor={(item) => `onboarding_screens_${item.id}`}
+          data={onboarding_screens}
+          renderItem={renderTopFlatListItem}
+        />
+      </View>
+
+      {/* Title and Description Lists */}
+      <View style={styles.bottomContainer}>
+        <FlatList
+          ref={bottomFlatListRef}
+          pagingEnabled
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          scrollEnabled={false}
+          snapToInterval={SIZES.width}
+          snapToAlignment="center"
+          decelerationRate="fast"
+          keyExtractor={(item) => `onboarding_screens_title_${item.id}`}
+          data={onboarding_screens}
+          renderItem={renderBottomFlatListItem}
         />
 
-        {/* Upcoming movies */}
-        <MovieList title="Upcoming" data={upcomingMovies} />
-
-        {/* Popular movies */}
-        <MovieList title="Popular" data={popularMovies} />
-      </ScrollView>
+        <TextButton
+          label={isLastPage ? "Let's Go" : "Next"}
+          contentContainerStyle={styles.textButton}
+          onPress={handlePressButton}
+        />
+      </View>
     </Container>
   );
-}
+};
+
+export default Index;
