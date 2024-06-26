@@ -56,7 +56,7 @@ export const COLORS = {
 
   // Background
   backgroundPrimary: "#000000",
-  backgroundSecondary: "#050301",
+  backgroundSecondary: "#26282A",
   backgroundTertiary: "#333333",
   backgroundInversePrimary: "#CBCBCB",
   backgroundInverseSecondary: "#AFAFAF",
@@ -96,6 +96,14 @@ export const SIZES = {
   l2: 16,
   l3: 14,
   l4: 12,
+
+  content: {
+    flex: 1,
+    alignItems: "stretch",
+    flexDirection: "column",
+    marginHorizontal: 8,
+    marginTop: 20,
+  },
 
   // app dimensions
   width,

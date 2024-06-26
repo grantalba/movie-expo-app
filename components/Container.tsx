@@ -1,4 +1,4 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import { View, StyleSheet, ColorValue, Platform } from "react-native";
 import { Appbar } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -11,17 +11,18 @@ interface Header {
   pageTitle?: any;
   shouldDisplayBack?: boolean;
   onBackPress?: any;
+  left?: React.ReactElement;
+  right?: React.ReactElement;
 }
 
 const Container = ({
   children,
   backgroundColor,
   header,
-}: {
-  children: React.ReactElement | React.ReactElement[];
+}: PropsWithChildren<{
   backgroundColor?: ColorValue;
   header?: Header;
-}): React.JSX.Element => {
+}>): React.JSX.Element => {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
 
@@ -41,8 +42,9 @@ const Container = ({
 
       // Paddings to handle safe area
       paddingTop: insets.top,
-      paddingLeft: insets.left,
-      paddingRight: insets.right,
+      paddingLeft: insets.left + 5,
+      paddingRight: insets.right + 5,
+      paddingBottom: insets.bottom + 5,
       backgroundColor,
     },
     header: {
@@ -51,6 +53,7 @@ const Container = ({
     contentStyle: {
       marginLeft: 10,
       alignItems: "center",
+      justifyContent: "center",
     },
   });
 
@@ -66,6 +69,7 @@ const Container = ({
               onPress={handleOnBackPress}
             />
           </RenderWhen>
+          <RenderWhen condition={!!header?.left}>{header?.left}</RenderWhen>
           <RenderWhen condition={!!header?.pageTitle}>
             <Appbar.Content
               title={header?.pageTitle}
@@ -77,6 +81,7 @@ const Container = ({
               style={styles.contentStyle}
             />
           </RenderWhen>
+          <RenderWhen condition={!!header?.left}>{header?.right}</RenderWhen>
         </Appbar.Header>
       </RenderWhen>
 
