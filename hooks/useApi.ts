@@ -13,9 +13,9 @@ const useApi = (endpoint: string, method = "GET", pageNumber = 1) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchApi = async () => {
+  const fetchApi = useCallback(async () => {
     try {
-      setLoading(true);
+      if (pageNumber === 1) setLoading(true); // Messing up the pagination rendering
 
       const options = {
         method: "GET",
@@ -39,19 +39,19 @@ const useApi = (endpoint: string, method = "GET", pageNumber = 1) => {
         }
       }
 
-      setLoading(false);
+      if (pageNumber === 1) setLoading(false); // Messing up the pagination rendering
     } catch (err: any) {
       console.error(err);
       setError(err);
       setLoading(false);
     }
-  };
+  }, [pageNumber, endpoint, method]);
 
   useEffect(() => {
     fetchApi();
   }, [pageNumber, endpoint, method]);
 
-  return { data, error, loading };
+  return { data, error, loading, fetchApi };
 };
 
 export default useApi;

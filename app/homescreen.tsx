@@ -1,6 +1,11 @@
 import React, { useCallback, useState } from "react";
 import Container from "@/components/Container";
-import { ActivityIndicator, Platform, ScrollView } from "react-native";
+import {
+  ActivityIndicator,
+  Platform,
+  RefreshControl,
+  ScrollView,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS, SIZES } from "../constants/theme";
 import TopRatedMovie from "@/components/TopRatedMovie";
@@ -14,6 +19,7 @@ export default function Homescreen() {
     data: topRatedMovies,
     error: topRatedMoviesError,
     loading: topRatedLoading,
+    fetchApi,
   } = useApi("top_rated", "GET", pageNumber);
   const {
     data: upcomingMovies,
@@ -36,6 +42,10 @@ export default function Homescreen() {
   const handleRightIconPress = () => {
     // TODO: handleRightIconPress
   };
+
+  const onRefresh = React.useCallback(() => {
+    fetchApi();
+  }, []);
 
   return (
     <Container
@@ -70,6 +80,13 @@ export default function Homescreen() {
         contentContainerStyle={{
           paddingBottom: SIZES.height * 0.15,
         }}
+        refreshControl={
+          <RefreshControl
+            refreshing={popularLoading || topRatedLoading || upcomingLoading}
+            onRefresh={onRefresh}
+            tintColor={COLORS.contentPrimary}
+          />
+        }
       >
         <RenderWhen
           condition={topRatedLoading || popularLoading || upcomingLoading}
