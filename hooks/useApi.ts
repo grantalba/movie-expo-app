@@ -6,7 +6,7 @@ const BASE_URL = "https://api.themoviedb.org/3/movie/";
 //   "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzOWJlYjc2MDE4ODM5M2M2ODBlZjEzMmE5ZTBlNGU0YSIsIm5iZiI6MTcxOTMwMjcwNy40NDc0MjUsInN1YiI6IjY2N2E3NmRmMThjNmRmMzdkZDA3ODUwMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.YC1BGtXmH8xAlHBDN_rUz83Zh3C3Yvnz9FIgeKX7hHo";
 
 const AUTH_TOKEN =
-  "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1ZmYxZTEwMjExOTZlMjZlNTAxNzcxOWFlNTVi OWJiMiIsIm5iZiI6MTcxOTIxNTIxMC45NzI4MTQsInN1YiI6IjY2NzkyM2UwZmI4Y2IxY zZjMDU2NTZiZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7TDDR6g XS9FeDdtdgxxH13rQtpTNGmW5W5PdXEQdmF8";
+  "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1ZmYxZTEwMjExOTZlMjZlNTAxNzcxOWFlNTViOWJiMiIsIm5iZiI6MTcxOTIxNTIxMC45NzI4MTQsInN1YiI6IjY2NzkyM2UwZmI4Y2IxYzZjMDU2NTZiZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7TDDR6gXS9FeDdtdgxxH13rQtpTNGmW5W5PdXEQdmF8";
 
 const useApi = (endpoint: string, method = "GET", pageNumber = 1) => {
   const [data, setData] = useState(null);
