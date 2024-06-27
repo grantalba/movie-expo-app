@@ -3,8 +3,13 @@ import { View, StyleSheet, Image, TouchableOpacity, Text } from "react-native";
 import { Link } from "expo-router";
 import { COLORS, SIZES, FONTS } from "@/constants/theme";
 import Carousel from "react-native-reanimated-carousel";
+import RenderWhen from "./RenderWhen";
 
-export default memo(function TopRatedMovie({ data, handlePageNumber }: any) {
+export default memo(function TopRatedMovie({
+  data,
+  handlePageNumber,
+  loading = false,
+}: any) {
   const lastIndex = data?.results?.length;
 
   const renderCarousel = ({ item, index }: any) => {
@@ -50,33 +55,38 @@ export default memo(function TopRatedMovie({ data, handlePageNumber }: any) {
     },
   });
 
+  if (!data?.results || loading) {
+    return <View />;
+  }
+
   return (
     <View style={{ ...SIZES.content }}>
-      <Text style={styles.headerText}>Top Rated Movie</Text>
-      <View
-        style={{
-          width: SIZES.width,
-        }}
-      >
-        <Carousel
-          data={data?.results}
-          renderItem={renderCarousel}
-          width={SIZES.width}
-          height={SIZES.height * 0.35}
-          defaultIndex={1}
-          // style={styles.slideStyle}
-          loop={false}
-          mode="parallax"
-          modeConfig={{
-            parallaxScrollingOffset: 200,
+      <RenderWhen condition={data?.results && !loading}>
+        <Text style={styles.headerText}>Top Rated Movie</Text>
+        <View
+          style={{
+            width: SIZES.width,
           }}
-          onScrollEnd={(index) => {
-            if (lastIndex === index + 1) {
-              handlePageNumber();
-            }
-          }}
-        />
-      </View>
+        >
+          <Carousel
+            data={data?.results}
+            renderItem={renderCarousel}
+            width={SIZES.width}
+            height={SIZES.height * 0.35}
+            defaultIndex={1}
+            loop={false}
+            mode="parallax"
+            modeConfig={{
+              parallaxScrollingOffset: 200,
+            }}
+            onScrollEnd={(index) => {
+              if (lastIndex === index + 1) {
+                handlePageNumber();
+              }
+            }}
+          />
+        </View>
+      </RenderWhen>
     </View>
   );
 });

@@ -1,7 +1,10 @@
-import * as React from 'react';
-import {View} from 'react-native';
+import * as React from "react";
+import { View } from "react-native";
 
-function RenderWhen({condition = false, children = <View />}) {
+function RenderWhen({
+  condition = false,
+  children = <View />,
+}: React.PropsWithChildren & { condition: boolean }) {
   // Used to render react elements when the condition is true.
   return condition ? children : null;
 }
